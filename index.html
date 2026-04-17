@@ -775,12 +775,28 @@ function buildEtiquetteCard(e) {
     </div>`;
 }
 
-// Pour le verso : meme ordre que le recto + rotation 180deg via CSS.
-// Position 0 au recto = position 0 au verso sur la feuille.
+// Pour le verso : miroir horizontal (on inverse chaque ligne de gauche a droite).
+// Franck a teste et confirme :
+//   - Position 0 recto (haut-gauche) doit aller en position 4 au verso (haut-droite)
+//   - Position 4 recto (haut-droite) doit aller en position 0 au verso (haut-gauche)
+//   - etc.
+// Raison : quand l'imprimante retourne la feuille sur le bord long, le cote
+// gauche du recto devient physiquement le cote droit du verso.
+//
+// Recto :                         Verso (ce qu'on imprime) :
+//   [0 1 2 3 4]                     [4 3 2 1 0]
+//   [5 6 7 8 9]                     [9 8 7 6 5]
+//
+// Combine avec la rotation 180deg CSS (pour le sens de lecture correct),
+// chaque etiquette verso se retrouve pile derriere son recto apres
+// retournement physique.
 function reorderForVerso(group) {
   const padded = group.slice(0, 10);
   while (padded.length < 10) padded.push(null);
-  return padded;
+  return [
+    padded[4], padded[3], padded[2], padded[1], padded[0],
+    padded[9], padded[8], padded[7], padded[6], padded[5],
+  ];
 }
 
 function printDuplex() {
