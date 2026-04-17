@@ -246,38 +246,27 @@
     .editable:hover, .editable:focus { background: none !important; box-shadow: none !important; }
     .editable[data-placeholder]:empty { display: none; }
 
-    /* Mode etiquette pliable : chaque etiquette = 5.5x20cm avec design
-       repete 2 fois (haut a l'endroit, bas tete-beche). On plie en deux
-       au milieu -> recto-verso automatique sans calibrage imprimante. */
-    body.print-foldable .etiquettes-grid {
+    /* Mode recto-verso : recto sur page 1, verso mirroir sur page 2.
+       Le verso est genere en inversant chaque ligne (miroir horizontal)
+       + rotation 180deg sur chaque etiquette. Apres retournement de la
+       feuille sur le bord long, chaque verso se retrouve pile derriere
+       son recto. */
+    body.print-duplex .etiquettes-grid { display: block; }
+    body.print-duplex .duplex-page {
       display: grid;
       grid-template-columns: repeat(5, 5.5cm);
       gap: 0;
       justify-content: center;
+      page-break-after: always;
+      break-after: page;
     }
-    body.print-foldable .etiquette-wrapper { width: 5.5cm; height: 20cm; }
-    body.print-foldable .foldable-etiquette {
-      width: 5.5cm; height: 20cm;
-      display: flex; flex-direction: column;
-      position: relative;
+    body.print-duplex .duplex-page:last-child {
+      page-break-after: auto;
+      break-after: auto;
     }
-    body.print-foldable .foldable-half {
-      width: 5.5cm; height: 10cm;
-      overflow: hidden;
-    }
-    body.print-foldable .foldable-half.bottom { transform: rotate(180deg); }
-    body.print-foldable .fold-line {
-      position: absolute; left: 0; right: 0; top: 10cm;
-      height: 0; border-top: 0.5pt dashed #999;
-      pointer-events: none;
-    }
+    body.print-duplex .duplex-page.verso .etiquette-wrapper { transform: rotate(180deg); }
   }
   @page { size: A4 landscape; margin: 5mm; }
-  @media print {
-    body.print-foldable { }
-  }
-  /* En mode foldable on passe en portrait pour avoir 20cm de hauteur */
-  @media print { body.print-foldable { } }
 
   /* Login screen */
   .login-screen {
