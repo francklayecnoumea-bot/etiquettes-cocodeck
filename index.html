@@ -694,24 +694,7 @@ function render() {
       <button class="delete-btn no-print" onclick="removeEtiquette(${typeof e.id === 'number' ? e.id : `'${e.id}'`})" title="Supprimer">&#10005;</button>
       <div class="etiquette">
         <div class="brand-tag">
-          <svg class="logo-cocodeck" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-label="CocoDeck">
-            <rect x="4" y="4" width="96" height="180" rx="10" fill="#4a5a4c"/>
-            <g fill="#ffffff">
-              <path d="M 52 46 Q 50 70 50 100 Q 50 130 48 160 L 56 160 Q 54 130 54 100 Q 54 70 56 46 Z"/>
-              <path d="M 52 46 Q 28 40 14 58 Q 22 46 36 46 Q 30 52 24 60 Q 36 50 52 50 Z"/>
-              <path d="M 52 46 Q 76 40 90 58 Q 82 46 68 46 Q 74 52 80 60 Q 68 50 52 50 Z"/>
-              <path d="M 52 46 Q 42 24 22 20 Q 36 30 44 42 Q 38 30 32 22 Q 44 32 52 50 Z"/>
-              <path d="M 52 46 Q 62 24 82 20 Q 68 30 60 42 Q 66 30 72 22 Q 60 32 52 50 Z"/>
-              <path d="M 52 46 Q 50 22 56 10 Q 54 24 56 38 Q 58 24 62 12 Q 54 26 52 50 Z"/>
-            </g>
-            <g fill="#4a5a4c" font-family="'Archivo Black', 'Inter', sans-serif" font-weight="900" font-size="52" letter-spacing="-2">
-              <text x="112" y="64">CO</text>
-              <text x="112" y="118">CO</text>
-            </g>
-            <g fill="#4a5a4c" font-family="'Archivo Black', 'Inter', sans-serif" font-weight="900" font-size="36" letter-spacing="-1">
-              <text x="112" y="170">DECK</text>
-            </g>
-          </svg>
+          <img class="logo-cocodeck" src="logo.png" alt="CocoDeck">
         </div>
         <div class="etiq-top">
           <div class="plat-name editable" contenteditable="true" data-idx="${i}" data-field="name" onblur="onEditField(this)">${esc(e.name)}</div>
