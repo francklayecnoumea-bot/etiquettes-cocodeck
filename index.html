@@ -762,14 +762,24 @@ function buildEtiquetteCard(e) {
     </div>`;
 }
 
-// Pour le verso : meme ordre que le recto.
-// La rotation 180deg via CSS suffit a compenser le basculement physique
-// "bords longs" de l'imprimante : l'etiquette verso reste derriere son
-// recto correspondant, a l'endroit.
+// Pour le verso : on echange les 2 lignes de la grille (haut <-> bas).
+// L'imprimante en "bords longs" fait rotation 180deg + inversion haut/bas.
+// La rotation 180deg CSS compense la rotation.
+// L'echange des 2 lignes ici compense l'inversion haut/bas.
+//
+// Recto :                         Verso (ce qu'on imprime) :
+//   [0 1 2 3 4]                     [5 6 7 8 9]
+//   [5 6 7 8 9]                     [0 1 2 3 4]
+//
+// Apres retournement physique sur bords longs, chaque etiquette verso
+// se retrouve pile derriere son recto correspondant, dans le meme sens.
 function reorderForVerso(group) {
   const padded = group.slice(0, 10);
   while (padded.length < 10) padded.push(null);
-  return padded;
+  return [
+    padded[5], padded[6], padded[7], padded[8], padded[9],
+    padded[0], padded[1], padded[2], padded[3], padded[4],
+  ];
 }
 
 function printDuplex() {
