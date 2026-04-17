@@ -508,16 +508,21 @@ function render() {
       <button class="delete-btn no-print" onclick="removeEtiquette(${typeof e.id === 'number' ? e.id : `'${e.id}'`})" title="Supprimer">&#10005;</button>
       <div class="etiquette">
         <div class="brand-tag">
-          <svg class="logo-cocodeck" viewBox="0 0 160 60" xmlns="http://www.w3.org/2000/svg" aria-label="CocoDeck">
-            <g fill="none" stroke="#4a5a4c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="30" cy="30" r="14"/>
-              <path d="M 22 30 Q 30 22 38 30"/>
-              <path d="M 22 30 Q 30 38 38 30"/>
+          <svg class="logo-cocodeck" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-label="Cocotier">
+            <g fill="none" stroke="#4a5a4c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M 30 54 Q 28 40 32 26 Q 34 18 36 12"/>
             </g>
-            <g fill="#4a5a4c" font-family="Inter, sans-serif" font-weight="700" font-size="18" letter-spacing="1">
-              <text x="54" y="36">CocoDeck</text>
+            <g fill="#4a5a4c">
+              <path d="M 36 12 Q 20 10 10 20 Q 22 14 36 16 Z"/>
+              <path d="M 36 12 Q 52 10 56 22 Q 46 14 36 16 Z"/>
+              <path d="M 36 12 Q 28 2 16 4 Q 28 10 36 16 Z"/>
+              <path d="M 36 12 Q 44 0 54 6 Q 44 10 36 16 Z"/>
+              <circle cx="32" cy="18" r="2"/>
+              <circle cx="40" cy="20" r="2"/>
             </g>
-            <line x1="54" y1="44" x2="144" y2="44" stroke="#c78570" stroke-width="1.5"/>
+            <g fill="none" stroke="#c78570" stroke-width="1.5" stroke-linecap="round">
+              <path d="M 8 54 Q 18 50 28 54 T 48 54 T 56 54"/>
+            </g>
           </svg>
           <span class="brand-name">COCODECK</span>
         </div>
