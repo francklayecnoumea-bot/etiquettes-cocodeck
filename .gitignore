@@ -1,4 +1,7 @@
 .vercel
+node_modules
 _*.js
 _*.txt
 _*.json
+_*.png
+package*.json
