@@ -246,25 +246,38 @@
     .editable:hover, .editable:focus { background: none !important; box-shadow: none !important; }
     .editable[data-placeholder]:empty { display: none; }
 
-    /* Mode recto-verso : duplique chaque groupe de 10 en page verso */
-    /* Recto : ordre normal
-       Verso : ordre inverse ET chaque etiquette tournee de 180deg.
-       Pourquoi ? Quand l'imprimante retourne la feuille sur le grand cote,
-       le verso apparait tete-beche par rapport au recto. En prerotation de
-       180deg dans l'impression, ca compense le retournement physique et
-       l'etiquette du verso ressort a l'endroit, alignee avec le recto. */
-    body.print-duplex .etiquettes-grid { display: block; }
-    body.print-duplex .duplex-page {
+    /* Mode etiquette pliable : chaque etiquette = 5.5x20cm avec design
+       repete 2 fois (haut a l'endroit, bas tete-beche). On plie en deux
+       au milieu -> recto-verso automatique sans calibrage imprimante. */
+    body.print-foldable .etiquettes-grid {
       display: grid;
       grid-template-columns: repeat(5, 5.5cm);
       gap: 0;
       justify-content: center;
-      page-break-after: always;
     }
-    body.print-duplex .duplex-page:last-child { page-break-after: auto; }
-    body.print-duplex .duplex-page.verso .etiquette-wrapper { transform: rotate(180deg); }
+    body.print-foldable .etiquette-wrapper { width: 5.5cm; height: 20cm; }
+    body.print-foldable .foldable-etiquette {
+      width: 5.5cm; height: 20cm;
+      display: flex; flex-direction: column;
+      position: relative;
+    }
+    body.print-foldable .foldable-half {
+      width: 5.5cm; height: 10cm;
+      overflow: hidden;
+    }
+    body.print-foldable .foldable-half.bottom { transform: rotate(180deg); }
+    body.print-foldable .fold-line {
+      position: absolute; left: 0; right: 0; top: 10cm;
+      height: 0; border-top: 0.5pt dashed #999;
+      pointer-events: none;
+    }
   }
   @page { size: A4 landscape; margin: 5mm; }
+  @media print {
+    body.print-foldable { }
+  }
+  /* En mode foldable on passe en portrait pour avoir 20cm de hauteur */
+  @media print { body.print-foldable { } }
 
   /* Login screen */
   .login-screen {
@@ -762,24 +775,12 @@ function buildEtiquetteCard(e) {
     </div>`;
 }
 
-// Pour le verso : on echange les 2 lignes de la grille (haut <-> bas).
-// L'imprimante en "bords longs" fait rotation 180deg + inversion haut/bas.
-// La rotation 180deg CSS compense la rotation.
-// L'echange des 2 lignes ici compense l'inversion haut/bas.
-//
-// Recto :                         Verso (ce qu'on imprime) :
-//   [0 1 2 3 4]                     [5 6 7 8 9]
-//   [5 6 7 8 9]                     [0 1 2 3 4]
-//
-// Apres retournement physique sur bords longs, chaque etiquette verso
-// se retrouve pile derriere son recto correspondant, dans le meme sens.
+// Pour le verso : meme ordre que le recto + rotation 180deg via CSS.
+// Position 0 au recto = position 0 au verso sur la feuille.
 function reorderForVerso(group) {
   const padded = group.slice(0, 10);
   while (padded.length < 10) padded.push(null);
-  return [
-    padded[5], padded[6], padded[7], padded[8], padded[9],
-    padded[0], padded[1], padded[2], padded[3], padded[4],
-  ];
+  return padded;
 }
 
 function printDuplex() {
