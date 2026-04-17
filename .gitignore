@@ -1,1 +1,4 @@
 .vercel
+_*.js
+_*.txt
+_*.json
