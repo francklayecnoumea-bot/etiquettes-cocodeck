@@ -180,6 +180,55 @@
   .etiq-bottom { background: #4a5a4c; padding: 12px; text-align: center; }
   .prix { font-family: 'Inter', sans-serif; font-size: 30px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
 
+  /* ===== RESPONSIVE MOBILE ===== */
+  @media (max-width: 720px) {
+    .app-header {
+      padding: 12px 16px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .app-header h1 { font-size: 18px; }
+    .app-header .subtitle { font-size: 9px; letter-spacing: 1.5px; }
+    .header-actions {
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .tabs { flex: 1; }
+    .tab { padding: 8px 12px; font-size: 12px; flex: 1; text-align: center; }
+    .container { padding: 16px; }
+    .search-bar input { padding: 10px 14px; font-size: 14px; }
+    .cat-filter { font-size: 11px; padding: 6px 10px; }
+    .catalog-grid { grid-template-columns: 1fr; }
+    .catalog-item { padding: 12px; flex-wrap: wrap; gap: 8px; }
+    .catalog-item .item-info { flex-basis: 100%; }
+    .catalog-item .item-prix { margin: 0; font-size: 15px; }
+    .form-section { padding: 16px; }
+    .form-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .form-row .form-group:nth-child(1),
+    .form-row .form-group:nth-child(2) { grid-column: 1 / -1; }
+    .select-summary {
+      flex-direction: column;
+      gap: 10px;
+      padding: 14px 16px;
+      margin: 16px -16px -16px;
+      border-radius: 12px 12px 0 0;
+    }
+    .select-summary .btn { width: 100%; }
+    .etiquettes-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    .plat-name { font-size: 20px; }
+    .plat-desc { font-size: 12px; }
+    .prix { font-size: 26px; }
+    .login-box { width: calc(100% - 32px); max-width: 340px; padding: 32px 24px; }
+  }
+
   /* ===== PRINT ===== */
   @media print {
     body { background: #fff !important; }
@@ -674,7 +723,6 @@ function render() {
         <div class="etiq-separator"></div>
         <div class="etiq-bottom">
           <div class="prix editable" contenteditable="true" data-idx="${i}" data-field="prix" onblur="onEditField(this)" ${!e.prix ? 'data-placeholder="Prix"' : ''}>${esc(e.prix || '')}</div>
-          <div class="prix-unit">${esc(e.unit)}</div>
         </div>
       </div>
     </div>
