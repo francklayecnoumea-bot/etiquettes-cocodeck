@@ -245,6 +245,19 @@
     .editable { cursor: default !important; }
     .editable:hover, .editable:focus { background: none !important; box-shadow: none !important; }
     .editable[data-placeholder]:empty { display: none; }
+
+    /* Mode recto-verso : duplique chaque groupe de 10 en page verso avec ordre miroir */
+    body.print-duplex .etiquettes-grid { display: block; }
+    body.print-duplex .duplex-page {
+      display: grid;
+      grid-template-columns: repeat(5, 5.5cm);
+      gap: 0;
+      justify-content: center;
+      page-break-after: always;
+    }
+    body.print-duplex .duplex-page:last-child { page-break-after: auto; }
+    body.print-duplex .duplex-page.verso { direction: rtl; }
+    body.print-duplex .duplex-page.verso .etiquette-wrapper { direction: ltr; }
   }
   @page { size: A4 landscape; margin: 5mm; }
 
@@ -331,6 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
     <button class="btn btn-outline btn-small" onclick="clearAll()">Effacer</button>
     <button class="btn btn-primary" onclick="switchTab('etiquettes'); setTimeout(()=>window.print(), 300)">Imprimer</button>
+    <button class="btn btn-add" onclick="printDuplex()" title="Imprime la meme etiquette au recto et au verso">Imprimer R/V</button>
   </div>
 </header>
 
@@ -713,6 +727,74 @@ renderCatalogFilters();
 filterCatalog();
 render();
 updateBadge();
+
+// ===== IMPRESSION RECTO-VERSO =====
+// Duplique la meme etiquette au verso. Pour que recto et verso s'alignent
+// apres retournement sur grand cote (reglage par defaut imprimante A4 paysage),
+// la page verso est en ordre miroir horizontal (via direction: rtl).
+// Important : l'utilisateur doit activer "Recto-verso - Retourner sur le grand cote"
+// dans les reglages d'impression (c'est le defaut sur la plupart des drivers).
+function printDuplex() {
+  if (!etiquettes.length) { alert('Aucune etiquette a imprimer'); return; }
+  switchTab('etiquettes');
+
+  const grid = document.getElementById('grid');
+  const originalHTML = grid.innerHTML;
+
+  // On construit les pages par paquets de 10 (5 colonnes x 2 rangees = A4 paysage)
+  const PER_PAGE = 10;
+  let duplexHTML = '';
+  for (let p = 0; p < etiquettes.length; p += PER_PAGE) {
+    const group = etiquettes.slice(p, p + PER_PAGE);
+    const cards = group.map((e, i) => {
+      const idx = p + i;
+      return `
+        <div class="etiquette-wrapper">
+          <div class="etiquette">
+            <div class="brand-tag">
+              <img class="logo-cocodeck" src="logo.png" alt="CocoDeck">
+            </div>
+            <div class="etiq-top">
+              <div class="plat-name">${esc(e.name)}</div>
+              <div class="plat-desc">${esc(e.desc || '')}</div>
+            </div>
+            <div class="etiq-separator"></div>
+            <div class="etiq-bottom">
+              <div class="prix">${esc(e.prix || '')}</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+    duplexHTML += `<div class="duplex-page recto">${cards}</div>`;
+    duplexHTML += `<div class="duplex-page verso">${cards}</div>`;
+  }
+
+  grid.innerHTML = duplexHTML;
+  document.body.classList.add('print-duplex');
+
+  setTimeout(() => {
+    const restore = () => {
+      document.body.classList.remove('print-duplex');
+      grid.innerHTML = originalHTML;
+      window.removeEventListener('afterprint', restore);
+    };
+    window.addEventListener('afterprint', restore);
+
+    const confirmed = confirm(
+      'IMPRESSION RECTO-VERSO\n\n' +
+      'Dans la boite d\'impression, verifie :\n' +
+      '1. Recto-verso active\n' +
+      '2. "Retourner sur le grand cote" (defaut)\n' +
+      '3. Papier epais 200g+ recommande\n\n' +
+      'Continuer ?'
+    );
+    if (confirmed) {
+      window.print();
+    } else {
+      restore();
+    }
+  }, 100);
+}
 </script>
 </div><!-- /app-content -->
 </body>
