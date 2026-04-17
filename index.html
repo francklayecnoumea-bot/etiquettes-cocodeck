@@ -762,13 +762,14 @@ function buildEtiquetteCard(e) {
     </div>`;
 }
 
-// Reordonne 10 etiquettes (grille 5 col x 2 lignes) pour la page verso
-// en les inversant completement (index 9 -> 0). Combine avec rotate(180deg)
-// CSS, chaque etiquette verso se retrouve exactement derriere son recto.
+// Pour le verso : meme ordre que le recto.
+// La rotation 180deg via CSS suffit a compenser le basculement physique
+// "bords longs" de l'imprimante : l'etiquette verso reste derriere son
+// recto correspondant, a l'endroit.
 function reorderForVerso(group) {
   const padded = group.slice(0, 10);
   while (padded.length < 10) padded.push(null);
-  return [...padded].reverse();
+  return padded;
 }
 
 function printDuplex() {
