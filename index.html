@@ -782,9 +782,12 @@ function buildEtiquetteCard(e) {
 function reorderForVerso(group) {
   const padded = group.slice(0, 10);
   while (padded.length < 10) padded.push(null);
+  // Miroir VERTICAL (lignes haut/bas echangees).
+  // Toshiba 3055C retourne la feuille sur le bord court -> haut devient bas.
+  // On pre-echange les lignes pour compenser.
   return [
-    padded[4], padded[3], padded[2], padded[1], padded[0],
-    padded[9], padded[8], padded[7], padded[6], padded[5],
+    padded[5], padded[6], padded[7], padded[8], padded[9],
+    padded[0], padded[1], padded[2], padded[3], padded[4],
   ];
 }
 
