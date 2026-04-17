@@ -5,45 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CocoDeck — Etiquettes Vitrine</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', sans-serif; background: #f4efe6; color: #1a2e33; min-height: 100vh; }
+  body { font-family: 'Inter', sans-serif; background: #f5ede2; color: #2a2a2a; min-height: 100vh; }
 
   /* ===== APP SHELL ===== */
   .app-header {
     background: #fff; padding: 16px 28px;
     display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid #e2dcd0;
+    border-bottom: 1px solid #e8ddcc;
     box-shadow: 0 1px 8px rgba(0,0,0,0.04);
     position: sticky; top: 0; z-index: 100;
   }
-  .app-header h1 { font-family: 'Archivo Black', sans-serif; font-size: 22px; letter-spacing: -0.5px; color: #0a4f5e; }
-  .app-header .subtitle { font-size: 10px; color: #6b8a8f; margin-top: 1px; font-weight: 600; text-transform: uppercase; letter-spacing: 2.5px; }
+  .app-header h1 { font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700; color: #2a2a2a; }
+  .app-header .subtitle { font-size: 10px; color: #9a8e80; margin-top: 1px; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; }
   .header-actions { display: flex; gap: 8px; align-items: center; }
 
-  .btn { padding: 9px 18px; border: none; border-radius: 999px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
-  .btn-primary { background: #0a4f5e; color: #ffd15c; }
-  .btn-primary:hover { background: #0d6476; transform: translateY(-1px); }
-  .btn-outline { background: #fff; color: #6b7a7d; border: 1.5px solid #dcd5c7; }
-  .btn-outline:hover { background: #faf6ec; border-color: #0a4f5e; color: #0a4f5e; }
-  .btn-small { padding: 6px 12px; font-size: 11px; }
-  .btn-add { background: #ff6b4a; color: #fff; }
-  .btn-add:hover { background: #ff5230; }
+  .btn { padding: 8px 16px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .btn-primary { background: #4a5a4c; color: #fff; }
+  .btn-primary:hover { background: #3e4d40; }
+  .btn-outline { background: #fff; color: #666; border: 1px solid #ddd; }
+  .btn-outline:hover { background: #f5ede2; }
+  .btn-small { padding: 5px 10px; font-size: 11px; }
+  .btn-add { background: #c78570; color: #fff; }
+  .btn-add:hover { background: #b77560; }
 
   /* Tabs */
   .tabs { display: flex; gap: 0; margin-bottom: 0; }
   .tab {
-    padding: 10px 20px; font-size: 13px; font-weight: 700; cursor: pointer;
-    border: none; background: transparent; color: #9aa8ab;
-    border-bottom: 3px solid transparent; transition: all 0.15s;
-    font-family: 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 1px;
+    padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer;
+    border: none; background: transparent; color: #999;
+    border-bottom: 2px solid transparent; transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
   }
-  .tab.active { color: #0a4f5e; border-bottom-color: #ff6b4a; }
-  .tab:hover:not(.active) { color: #6b7a7d; }
+  .tab.active { color: #4a5a4c; border-bottom-color: #c78570; }
+  .tab:hover:not(.active) { color: #666; }
   .tab .badge {
-    display: inline-block; background: #ff6b4a; color: #fff;
-    font-size: 10px; padding: 2px 7px; border-radius: 10px; margin-left: 4px;
+    display: inline-block; background: #c78570; color: #fff;
+    font-size: 10px; padding: 1px 6px; border-radius: 10px; margin-left: 4px;
     font-weight: 700;
   }
 
@@ -53,163 +53,132 @@
   .tab-content.active { display: block; }
 
   /* ===== CATALOGUE TAB ===== */
-  .search-bar {
-    display: flex; gap: 10px; margin-bottom: 20px; align-items: center;
-  }
+  .search-bar { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
   .search-bar input {
-    flex: 1; padding: 11px 16px; background: #fff; border: 1.5px solid #e2dcd0;
-    border-radius: 999px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+    flex: 1; padding: 9px 14px; background: #fff; border: 1px solid #e8ddcc;
+    border-radius: 8px; font-size: 14px; font-family: 'Inter', sans-serif;
   }
-  .search-bar input:focus { outline: none; border-color: #0a4f5e; }
+  .search-bar input:focus { outline: none; border-color: #4a5a4c; }
   .search-bar input::placeholder { color: #c0b8ac; }
 
   .cat-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
   .cat-filter {
-    padding: 6px 14px; border-radius: 999px; font-size: 11px; font-weight: 700;
-    cursor: pointer; border: 1.5px solid #e2dcd0; background: #fff; color: #8a958f;
-    transition: all 0.15s; font-family: 'DM Sans', sans-serif;
-    text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    cursor: pointer; border: 1px solid #e8ddcc; background: #fff; color: #888;
+    transition: all 0.15s; font-family: 'Inter', sans-serif;
   }
-  .cat-filter.active { background: #0a4f5e; color: #ffd15c; border-color: #0a4f5e; }
-  .cat-filter:hover:not(.active) { border-color: #0a4f5e; color: #0a4f5e; }
+  .cat-filter.active { background: #4a5a4c; color: #fff; border-color: #4a5a4c; }
+  .cat-filter:hover:not(.active) { border-color: #c78570; color: #666; }
 
   .catalog-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px;
   }
   .catalog-item {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 11px 15px; background: #fff; border: 1.5px solid #ece6d9;
-    border-radius: 14px; transition: all 0.15s; cursor: default;
+    padding: 10px 14px; background: #fff; border: 1px solid #ece3d3;
+    border-radius: 8px; transition: all 0.15s; cursor: default;
   }
-  .catalog-item:hover { border-color: #0a4f5e; background: #fafaf3; }
-  .catalog-item.selected { border-color: #ff6b4a; background: #fff5f1; }
+  .catalog-item:hover { border-color: #c78570; background: #fdf7f0; }
+  .catalog-item.selected { border-color: #4a5a4c; background: #f3f6f1; }
   .catalog-item .item-info { flex: 1; min-width: 0; }
-  .catalog-item .item-name { font-size: 13px; font-weight: 600; color: #1a2e33; }
-  .catalog-item .item-desc { font-size: 11px; color: #9aa8ab; margin-top: 1px; }
-  .catalog-item .item-prix { font-size: 14px; font-weight: 800; color: #ff6b4a; white-space: nowrap; margin: 0 12px; }
+  .catalog-item .item-name { font-size: 13px; font-weight: 600; color: #2a2a2a; }
+  .catalog-item .item-desc { font-size: 11px; color: #999; margin-top: 1px; }
+  .catalog-item .item-prix { font-size: 14px; font-weight: 700; color: #c78570; white-space: nowrap; margin: 0 12px; }
 
   .select-summary {
     position: sticky; bottom: 0; background: #fff;
-    padding: 14px 24px; border-top: 1.5px solid #e2dcd0;
+    padding: 14px 24px; border-top: 1px solid #e8ddcc;
     display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 -2px 12px rgba(0,0,0,0.06); border-radius: 16px 16px 0 0;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.06); border-radius: 12px 12px 0 0;
     margin: 20px -28px -24px;
   }
-  .select-summary .count { font-size: 14px; font-weight: 700; color: #0a4f5e; }
-  .select-summary .count span { color: #ff6b4a; }
+  .select-summary .count { font-size: 14px; font-weight: 600; color: #4a5a4c; }
+  .select-summary .count span { color: #c78570; }
 
   /* ===== ETIQUETTES TAB ===== */
   .form-section {
-    background: #fff; border-radius: 16px; padding: 22px;
-    margin-bottom: 20px; border: 1.5px solid #e2dcd0;
+    background: #fff; border-radius: 12px; padding: 20px;
+    margin-bottom: 20px; border: 1px solid #e8ddcc;
   }
-  .form-section h2 { font-size: 12px; font-weight: 700; color: #0a4f5e; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .form-section h2 { font-size: 12px; font-weight: 600; color: #9a8e80; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
   .form-row { display: grid; grid-template-columns: 2fr 2fr 1fr auto; gap: 10px; align-items: end; }
-  .form-group label { display: block; font-size: 10px; color: #8a958f; margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; }
+  .form-group label { display: block; font-size: 10px; color: #999; margin-bottom: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
   .form-group input, .form-group select {
-    width: 100%; padding: 9px 12px; background: #faf8f2;
-    border: 1.5px solid #e2dcd0; border-radius: 10px; color: #1a2e33;
-    font-size: 13px; font-family: 'DM Sans', sans-serif;
+    width: 100%; padding: 8px 10px; background: #faf5ec;
+    border: 1px solid #e8ddcc; border-radius: 6px; color: #2a2a2a;
+    font-size: 13px; font-family: 'Inter', sans-serif;
   }
-  .form-group input:focus, .form-group select:focus { outline: none; border-color: #0a4f5e; }
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: #4a5a4c; }
   .form-group input::placeholder { color: #c0b8ac; }
-  .form-actions { margin-top: 12px; display: flex; gap: 10px; align-items: center; }
-  .form-hint { font-size: 10px; color: #b5b0a3; }
+  .form-actions { margin-top: 10px; display: flex; gap: 8px; align-items: center; }
+  .form-hint { font-size: 10px; color: #bbb; }
 
   .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .section-header h2 { font-size: 12px; font-weight: 700; color: #0a4f5e; text-transform: uppercase; letter-spacing: 1.5px; }
-  .counter { background: #fff; padding: 3px 12px; border-radius: 999px; font-size: 11px; color: #0a4f5e; border: 1.5px solid #e2dcd0; font-weight: 600; }
+  .section-header h2 { font-size: 12px; font-weight: 600; color: #9a8e80; text-transform: uppercase; letter-spacing: 1px; }
+  .counter { background: #fff; padding: 2px 10px; border-radius: 20px; font-size: 11px; color: #9a8e80; border: 1px solid #e8ddcc; }
 
   .etiquettes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
 
   .etiquette-wrapper { position: relative; }
   .etiquette-wrapper .delete-btn {
     position: absolute; top: -5px; right: -5px;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: #ff6b4a; color: #fff; border: 2px solid #f4efe6;
-    cursor: pointer; font-size: 10px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #b04a3a; color: #fff; border: 2px solid #f5ede2;
+    cursor: pointer; font-size: 9px;
     display: flex; align-items: center; justify-content: center;
     opacity: 0; transition: opacity 0.15s; z-index: 10;
-    font-weight: 700;
   }
   .etiquette-wrapper:hover .delete-btn { opacity: 1; }
   /* Editable fields */
-  .editable { cursor: text; border-radius: 4px; transition: background 0.15s; outline: none; min-height: 1em; }
-  .editable:hover { background: rgba(0,0,0,0.04); }
-  .editable:focus { background: rgba(0,0,0,0.07); box-shadow: 0 0 0 2px #ffd15c; }
-  .etiq-bottom .editable:hover { background: rgba(255,255,255,0.12); }
-  .etiq-bottom .editable:focus { background: rgba(255,255,255,0.2); box-shadow: 0 0 0 2px rgba(255,255,255,0.4); }
-  .editable[data-placeholder]:empty::before { content: attr(data-placeholder); color: rgba(122,140,145,0.45); font-style: italic; }
-  .prix-unit { font-size: 12px; color: rgba(255,255,255,0.85); margin-top: 3px; font-weight: 600; letter-spacing: 0.5px; }
+  .editable { cursor: text; border-radius: 3px; transition: background 0.15s; outline: none; min-height: 1em; }
+  .editable:hover { background: rgba(0,0,0,0.05); }
+  .editable:focus { background: rgba(0,0,0,0.08); box-shadow: 0 0 0 2px #c78570; }
+  .etiq-bottom .editable:hover { background: rgba(255,255,255,0.1); }
+  .etiq-bottom .editable:focus { background: rgba(255,255,255,0.15); box-shadow: 0 0 0 2px rgba(255,255,255,0.3); }
+  .editable[data-placeholder]:empty::before { content: attr(data-placeholder); color: rgba(122,106,90,0.4); font-style: italic; }
+  .prix-unit { font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 3px; }
 
-  .empty-state { grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: #b5b0a3; }
+  .empty-state { grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: #bbb; }
   .empty-state .icon { font-size: 36px; margin-bottom: 8px; opacity: 0.5; }
   .empty-state p { font-size: 13px; max-width: 300px; margin: 0 auto; line-height: 1.6; }
 
-  /* ===== ETIQUETTE COCODECK (STREET FOOD VIBE) ===== */
+  /* ===== ETIQUETTE COCODECK — BISTRO EPURE (palette render 3D) ===== */
   .etiquette {
-    width: 100%; aspect-ratio: 55/100; border-radius: 10px; overflow: hidden;
+    width: 100%; aspect-ratio: 55/100; border-radius: 3px; overflow: hidden;
     display: flex; flex-direction: column;
     transition: transform 0.15s, box-shadow 0.15s;
-    background: #fff9ec;
-    box-shadow: 0 3px 12px rgba(10,79,94,0.12);
-    border: 1.5px solid #e8dfc7;
-    position: relative;
+    background: #f5ede2;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    border: 1px solid #e0d5c2;
   }
-  .etiquette::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
-    background: repeating-linear-gradient(90deg, #ff6b4a 0, #ff6b4a 10px, #ffd15c 10px, #ffd15c 20px, #0a4f5e 20px, #0a4f5e 30px);
-    z-index: 2;
-  }
-  .etiquette:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(10,79,94,0.18); }
+  .etiquette:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
 
   .brand-tag {
-    padding: 14px 8px 8px; background: transparent;
+    padding: 10px 8px 8px; background: transparent;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 4px; border-bottom: 2px dashed #e8dfc7; min-height: 70px;
+    gap: 3px; border-bottom: 1px solid #c78570; min-height: 60px;
   }
-  .brand-tag .logo-cocodeck { height: 42px; width: auto; max-width: 90%; display: block; }
+  .brand-tag .logo-cocodeck { height: 32px; width: auto; display: block; }
   .brand-tag .brand-name {
-    font-family: 'Archivo Black', sans-serif; font-size: 11px;
-    letter-spacing: 2.5px; color: #0a4f5e; line-height: 1;
-  }
-  .brand-tag .brand-sub {
-    font-family: 'Caveat', cursive; font-size: 11px; color: #ff6b4a;
-    line-height: 1; font-weight: 700;
+    font-family: 'Inter', sans-serif; font-weight: 800; font-size: 11px;
+    letter-spacing: 3px; color: #4a5a4c; line-height: 1;
   }
 
   .etiq-top {
     flex: 1; display: flex; flex-direction: column; align-items: center;
-    justify-content: center; padding: 10px 10px; text-align: center;
+    justify-content: center; padding: 10px 8px; text-align: center;
   }
   .plat-name {
-    font-family: 'Archivo Black', sans-serif; font-size: 22px;
-    color: #0a4f5e; line-height: 1.1; letter-spacing: -0.3px;
-    text-transform: uppercase;
+    font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 700;
+    color: #2a2a2a; line-height: 1.1;
   }
   .plat-desc {
-    font-family: 'Caveat', cursive; font-size: 16px; color: #8a958f;
-    margin-top: 6px; line-height: 1.2; font-weight: 600;
+    font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 400;
+    color: #8a7a6a; margin-top: 6px; line-height: 1.3;
   }
-  .etiq-separator {
-    width: 40px; height: 3px; background: #ff6b4a; margin: 0 auto;
-    border-radius: 999px;
-  }
-  .etiq-bottom {
-    background: #0a4f5e; padding: 14px 12px; text-align: center;
-    position: relative;
-  }
-  .etiq-bottom::before {
-    content: ''; position: absolute; top: -8px; left: 0; right: 0; height: 8px;
-    background-image:
-      radial-gradient(circle at 6px 8px, transparent 5px, #0a4f5e 5.5px);
-    background-size: 12px 8px;
-    background-repeat: repeat-x;
-  }
-  .prix {
-    font-family: 'Archivo Black', sans-serif; font-size: 32px;
-    color: #ffd15c; letter-spacing: -0.5px; line-height: 1;
-  }
+  .etiq-separator { width: 20px; height: 2px; background: #c78570; margin: 0 auto; }
+  .etiq-bottom { background: #4a5a4c; padding: 12px; text-align: center; }
+  .prix { font-family: 'Inter', sans-serif; font-size: 30px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
 
   /* ===== PRINT ===== */
   @media print {
@@ -226,7 +195,6 @@
       border: 0.5pt solid #ccc !important;
       -webkit-print-color-adjust: exact; print-color-adjust: exact;
     }
-    .etiquette::before, .etiq-bottom::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .etiquette:hover { transform: none; }
     .brand-tag, .etiq-bottom { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .editable { cursor: default !important; }
@@ -238,33 +206,28 @@
   /* Login screen */
   .login-screen {
     min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, #0a4f5e 0%, #0d6476 100%);
+    background: #f5ede2;
   }
   .login-box {
-    background: #fff9ec; padding: 42px; border-radius: 20px;
-    border: 2px solid #ffd15c; text-align: center; width: 360px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-    position: relative; overflow: hidden;
+    background: #fff; padding: 40px; border-radius: 12px;
+    border: 1px solid #e8ddcc; text-align: center; width: 340px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
   }
-  .login-box::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
-    background: repeating-linear-gradient(90deg, #ff6b4a 0, #ff6b4a 14px, #ffd15c 14px, #ffd15c 28px, #0a4f5e 28px, #0a4f5e 42px);
-  }
-  .login-box h2 { font-family: 'Archivo Black', sans-serif; font-size: 26px; margin-bottom: 4px; color: #0a4f5e; letter-spacing: -0.5px; }
-  .login-box .login-sub { font-family: 'Caveat', cursive; font-size: 18px; color: #ff6b4a; margin-bottom: 28px; font-weight: 700; }
+  .login-box h2 { font-family: 'Inter', sans-serif; font-size: 20px; margin-bottom: 4px; color: #2a2a2a; }
+  .login-box .login-sub { font-size: 11px; color: #9a8e80; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px; }
   .login-box input {
-    width: 100%; padding: 12px 16px; border: 1.5px solid #e2dcd0; border-radius: 12px;
-    font-size: 14px; text-align: center; font-family: 'DM Sans', sans-serif;
-    background: #fff;
+    width: 100%; padding: 10px 14px; border: 1px solid #e8ddcc; border-radius: 8px;
+    font-size: 14px; text-align: center; font-family: 'Inter', sans-serif;
+    background: #faf5ec;
   }
-  .login-box input:focus { outline: none; border-color: #0a4f5e; }
+  .login-box input:focus { outline: none; border-color: #4a5a4c; }
   .login-box .login-btn {
-    width: 100%; padding: 12px; margin-top: 14px; background: #0a4f5e; color: #ffd15c;
-    border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer;
-    font-family: 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 1px;
+    width: 100%; padding: 10px; margin-top: 12px; background: #4a5a4c; color: #fff;
+    border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: 'Inter', sans-serif;
   }
-  .login-box .login-btn:hover { background: #0d6476; }
-  .login-box .login-error { color: #ff6b4a; font-size: 12px; margin-top: 10px; display: none; font-weight: 600; }
+  .login-box .login-btn:hover { background: #3e4d40; }
+  .login-box .login-error { color: #b04a3a; font-size: 12px; margin-top: 8px; display: none; }
   .app-content { display: none; }
 </style>
 </head>
@@ -274,7 +237,7 @@
 <div class="login-screen" id="loginScreen">
   <div class="login-box">
     <h2>CocoDeck</h2>
-    <div class="login-sub">Street food &amp; bonnes vibes</div>
+    <div class="login-sub">Etiquettes vitrine</div>
     <input type="password" id="loginPassword" placeholder="Mot de passe" autofocus>
     <button class="login-btn" onclick="tryLogin()">Acc&eacute;der</button>
     <div class="login-error" id="loginError">Mot de passe incorrect</div>
@@ -372,9 +335,8 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <script>
-// ===== CATALOGUE DATA (CocoDeck — street food culinaire) =====
+// ===== CATALOGUE DATA (CocoDeck) =====
 const CATALOGUE = [
-  // Salades & Bowls
   { cat: "Salades & Bowls", name: "Salade Italienne", desc: "Mozza, tomate, basilic, pistou", prix: "", unit: "F." },
   { cat: "Salades & Bowls", name: "Salade Grecque", desc: "Feta, olives, concombre, tomate", prix: "", unit: "F." },
   { cat: "Salades & Bowls", name: "Salade Caesar Mer", desc: "Saumon ou crevettes, parmesan", prix: "", unit: "F." },
@@ -387,11 +349,10 @@ const CATALOGUE = [
   { cat: "Salades & Bowls", name: "Granola Maison & Yaourt", desc: "Granola maison, yaourt, miel", prix: "", unit: "F." },
   { cat: "Salades & Bowls", name: "Chia Pudding", desc: "Graines de chia, lait coco, fruits", prix: "", unit: "F." },
 
-  // Snacks & Sandwichs
   { cat: "Snacks & Sandwichs", name: "Croque Monsieur", desc: "Jambon, fromage, pain de mie", prix: "", unit: "F." },
   { cat: "Snacks & Sandwichs", name: "Burger", desc: "Steak, cheddar, sauce maison", prix: "", unit: "F." },
   { cat: "Snacks & Sandwichs", name: "Panini", desc: "Pain italien grill\u00e9", prix: "", unit: "F." },
-  { cat: "Snacks & Sandwichs", name: "Banh-Mi", desc: "Baguette vietnamienne, l\u00e9gumes pickles", prix: "", unit: "F." },
+  { cat: "Snacks & Sandwichs", name: "Banh-Mi", desc: "Baguette vietnamienne, pickles", prix: "", unit: "F." },
   { cat: "Snacks & Sandwichs", name: "Wrap", desc: "Tortilla garnie fra\u00eecheur", prix: "", unit: "F." },
   { cat: "Snacks & Sandwichs", name: "BLT Australien", desc: "Bacon, laitue, tomate, sauce", prix: "", unit: "F." },
   { cat: "Snacks & Sandwichs", name: "Club Sandwich CocoDeck", desc: "Triple \u00e9tage signature maison", prix: "", unit: "F." },
@@ -399,13 +360,11 @@ const CATALOGUE = [
   { cat: "Snacks & Sandwichs", name: "Sandwich", desc: "Classique, garniture du jour", prix: "", unit: "F." },
   { cat: "Snacks & Sandwichs", name: "Quiche", desc: "P\u00e2te bris\u00e9e maison, garniture du jour", prix: "", unit: "F." },
 
-  // Plats
   { cat: "Plats", name: "Box Poulet Saut\u00e9 Tha\u00ef", desc: "Riz, poulet, l\u00e9gumes, sauce tha\u00ef", prix: "", unit: "F." },
   { cat: "Plats", name: "Fish and Chips", desc: "Poisson pan\u00e9, frites maison", prix: "", unit: "F." },
   { cat: "Plats", name: "Plat du Jour", desc: "Selon l\u2019inspiration du chef", prix: "", unit: "F." },
   { cat: "Plats", name: "Bruschetta", desc: "Pain grill\u00e9, tomate, basilic, huile d\u2019olive", prix: "", unit: "F." },
 
-  // Desserts & Douceurs
   { cat: "Desserts", name: "Dessert du Jour", desc: "Cr\u00e9ation de la journ\u00e9e", prix: "", unit: "F." },
   { cat: "Desserts", name: "Flan", desc: "Flan p\u00e2tissier maison", prix: "", unit: "F." },
   { cat: "Desserts", name: "Carrot Cake", desc: "G\u00e2teau carotte, glacage cream cheese", prix: "", unit: "F." },
@@ -423,21 +382,16 @@ const CATALOGUE = [
 
 // ===== STATE =====
 let etiquettes = [];
-let selectedCatalogIds = new Set();
 let activeFilter = 'Tous';
 
 try { const s = localStorage.getItem('etiq-cocodeck-v1'); if (s) etiquettes = JSON.parse(s); } catch(e) {}
 
-// ===== TABS =====
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.textContent.trim().toLowerCase().startsWith(name.substring(0,4))));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.dataset.tab === name));
 }
 
-// ===== CATALOGUE =====
-function getCategories() {
-  return ['Tous', ...new Set(CATALOGUE.map(c => c.cat))];
-}
+function getCategories() { return ['Tous', ...new Set(CATALOGUE.map(c => c.cat))]; }
 
 function filterCatalog() {
   const search = (document.getElementById('searchInput').value || '').toLowerCase();
@@ -461,7 +415,7 @@ function setFilter(cat) { activeFilter = cat; renderCatalogFilters(); filterCata
 function renderCatalogItems(items) {
   const grid = document.getElementById('catalogGrid');
   if (!items.length) { grid.innerHTML = '<div class="empty-state"><p>Aucun produit trouv\u00e9</p></div>'; return; }
-  grid.innerHTML = items.map((item, idx) => {
+  grid.innerHTML = items.map((item) => {
     const globalIdx = CATALOGUE.indexOf(item);
     const inEtiq = etiquettes.some(e => e.catalogIdx === globalIdx);
     return `<div class="catalog-item ${inEtiq ? 'selected' : ''}">
@@ -488,7 +442,6 @@ function toggleCatalogItem(idx) {
   save(); render(); filterCatalog(); updateBadge();
 }
 
-// ===== MANUAL ADD =====
 function addManual() {
   const name = document.getElementById('platName').value.trim();
   const desc = document.getElementById('platDesc').value.trim();
@@ -509,7 +462,6 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// ===== ETIQUETTES =====
 function removeEtiquette(id) { etiquettes = etiquettes.filter(e => e.id !== id); save(); render(); filterCatalog(); updateBadge(); }
 
 function onEditField(el) {
@@ -547,7 +499,7 @@ function render() {
   document.getElementById('counter').textContent = etiquettes.length + ' \u00e9tiquette' + (etiquettes.length !== 1 ? 's' : '');
 
   if (!etiquettes.length) {
-    grid.innerHTML = '<div class="empty-state"><div class="icon">&#127796;</div><p>S\u00e9lectionnez des produits dans le catalogue ou ajoutez-en manuellement</p></div>';
+    grid.innerHTML = '<div class="empty-state"><div class="icon">&#9997;</div><p>S\u00e9lectionnez des produits dans le catalogue ou ajoutez-en manuellement</p></div>';
     return;
   }
 
@@ -556,41 +508,18 @@ function render() {
       <button class="delete-btn no-print" onclick="removeEtiquette(${typeof e.id === 'number' ? e.id : `'${e.id}'`})" title="Supprimer">&#10005;</button>
       <div class="etiquette">
         <div class="brand-tag">
-          <svg class="logo-cocodeck" viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg" aria-label="CocoDeck" shape-rendering="geometricPrecision">
-            <!-- Soleil -->
-            <circle cx="78" cy="52" r="20" fill="#ffd15c"/>
-            <!-- Rayons soleil -->
-            <g stroke="#ffd15c" stroke-width="3" stroke-linecap="round">
-              <line x1="78" y1="20" x2="78" y2="28"/>
-              <line x1="78" y1="76" x2="78" y2="84"/>
-              <line x1="46" y1="52" x2="54" y2="52"/>
-              <line x1="102" y1="52" x2="110" y2="52"/>
-              <line x1="56" y1="30" x2="62" y2="36"/>
-              <line x1="94" y1="68" x2="100" y2="74"/>
-              <line x1="56" y1="74" x2="62" y2="68"/>
-              <line x1="94" y1="36" x2="100" y2="30"/>
+          <svg class="logo-cocodeck" viewBox="0 0 160 60" xmlns="http://www.w3.org/2000/svg" aria-label="CocoDeck">
+            <g fill="none" stroke="#4a5a4c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="30" cy="30" r="14"/>
+              <path d="M 22 30 Q 30 22 38 30"/>
+              <path d="M 22 30 Q 30 38 38 30"/>
             </g>
-            <!-- Palmier (tronc) -->
-            <path d="M 180 108 Q 178 80 184 54 Q 188 40 194 32" fill="none" stroke="#0a4f5e" stroke-width="6" stroke-linecap="round"/>
-            <!-- Palmier (palmes) -->
-            <g fill="#0a4f5e">
-              <path d="M 194 30 Q 160 24 136 42 Q 158 36 194 36 Z"/>
-              <path d="M 194 30 Q 226 22 250 44 Q 226 34 196 36 Z"/>
-              <path d="M 194 30 Q 180 8 154 10 Q 178 20 196 34 Z"/>
-              <path d="M 194 30 Q 210 6 236 14 Q 212 22 198 36 Z"/>
-              <path d="M 194 30 Q 196 6 210 0 Q 200 18 198 34 Z"/>
+            <g fill="#4a5a4c" font-family="Inter, sans-serif" font-weight="700" font-size="18" letter-spacing="1">
+              <text x="54" y="36">CocoDeck</text>
             </g>
-            <!-- Noix de coco -->
-            <circle cx="188" cy="46" r="4" fill="#6b3410"/>
-            <circle cx="198" cy="50" r="4" fill="#6b3410"/>
-            <!-- Vagues -->
-            <g stroke="#0a4f5e" stroke-width="3" fill="none" stroke-linecap="round">
-              <path d="M 30 118 Q 50 112 70 118 T 110 118 T 150 118 T 190 118 T 230 118 T 270 118 T 290 118"/>
-              <path d="M 30 128 Q 50 122 70 128 T 110 128 T 150 128 T 190 128 T 230 128 T 270 128 T 290 128" stroke="#ff6b4a"/>
-            </g>
+            <line x1="54" y1="44" x2="144" y2="44" stroke="#c78570" stroke-width="1.5"/>
           </svg>
           <span class="brand-name">COCODECK</span>
-          <span class="brand-sub">street food &amp; good vibes</span>
         </div>
         <div class="etiq-top">
           <div class="plat-name editable" contenteditable="true" data-idx="${i}" data-field="name" onblur="onEditField(this)">${esc(e.name)}</div>
@@ -606,7 +535,6 @@ function render() {
   `).join('');
 }
 
-// ===== INIT =====
 renderCatalogFilters();
 filterCatalog();
 render();
