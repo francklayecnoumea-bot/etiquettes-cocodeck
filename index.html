@@ -246,7 +246,9 @@
     .editable:hover, .editable:focus { background: none !important; box-shadow: none !important; }
     .editable[data-placeholder]:empty { display: none; }
 
-    /* Mode recto-verso : duplique chaque groupe de 10 en page verso avec ordre miroir */
+    /* Mode recto-verso : duplique chaque groupe de 10 en page verso */
+    /* L'ordre miroir est gere directement en JS (reorderForVerso) pour
+       eviter les surprises de direction RTL selon les imprimantes. */
     body.print-duplex .etiquettes-grid { display: block; }
     body.print-duplex .duplex-page {
       display: grid;
@@ -256,8 +258,6 @@
       page-break-after: always;
     }
     body.print-duplex .duplex-page:last-child { page-break-after: auto; }
-    body.print-duplex .duplex-page.verso { direction: rtl; }
-    body.print-duplex .duplex-page.verso .etiquette-wrapper { direction: ltr; }
   }
   @page { size: A4 landscape; margin: 5mm; }
 
@@ -729,14 +729,73 @@ render();
 updateBadge();
 
 // ===== IMPRESSION RECTO-VERSO =====
-// Duplique la meme etiquette au verso. Pour que recto et verso s'alignent
-// apres retournement sur grand cote (reglage par defaut imprimante A4 paysage),
-// la page verso est en ordre miroir horizontal (via direction: rtl).
-// Important : l'utilisateur doit activer "Recto-verso - Retourner sur le grand cote"
-// dans les reglages d'impression (c'est le defaut sur la plupart des drivers).
+// L'imprimante peut retourner la feuille sur le grand cote (miroir horizontal)
+// OU sur le petit cote (miroir vertical). On ne peut pas deviner lequel depuis
+// le web -> on demande a Franck et on reordonne les etiquettes au verso
+// directement en JS pour matcher exactement le retournement physique.
+function buildEtiquetteCard(e) {
+  return `
+    <div class="etiquette-wrapper">
+      <div class="etiquette">
+        <div class="brand-tag">
+          <img class="logo-cocodeck" src="logo.png" alt="CocoDeck">
+        </div>
+        <div class="etiq-top">
+          <div class="plat-name">${esc(e.name)}</div>
+          <div class="plat-desc">${esc(e.desc || '')}</div>
+        </div>
+        <div class="etiq-separator"></div>
+        <div class="etiq-bottom">
+          <div class="prix">${esc(e.prix || '')}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// Reordonne 10 etiquettes (grille 5 col x 2 lignes) selon le type de retournement.
+// Positions recto (index 0..9) :
+//   0 1 2 3 4
+//   5 6 7 8 9
+// Miroir horizontal (retournement grand cote) -> positions verso :
+//   4 3 2 1 0
+//   9 8 7 6 5
+// Miroir vertical (retournement petit cote) -> positions verso :
+//   5 6 7 8 9
+//   0 1 2 3 4
+function reorderForVerso(group, mode) {
+  // group est un tableau de 10 max. On complete avec des nulls si moins.
+  const padded = group.slice(0, 10);
+  while (padded.length < 10) padded.push(null);
+
+  if (mode === 'horizontal') {
+    // Inverse chaque ligne de 5
+    return [
+      padded[4], padded[3], padded[2], padded[1], padded[0],
+      padded[9], padded[8], padded[7], padded[6], padded[5],
+    ];
+  } else {
+    // Vertical : echange les 2 lignes
+    return [
+      padded[5], padded[6], padded[7], padded[8], padded[9],
+      padded[0], padded[1], padded[2], padded[3], padded[4],
+    ];
+  }
+}
+
 function printDuplex() {
   if (!etiquettes.length) { alert('Aucune etiquette a imprimer'); return; }
   switchTab('etiquettes');
+
+  // Demande a Franck quel mode de retournement son imprimante utilise
+  const choice = prompt(
+    'IMPRESSION RECTO-VERSO — choisis le bon mode\n\n' +
+    'Tape 1 pour "Retournement sur grand cote" (defaut la plupart des imprimantes)\n' +
+    'Tape 2 pour "Retournement sur petit cote"\n\n' +
+    'Si le premier essai est mal aligne, refais avec l\'autre option.',
+    '1'
+  );
+  if (choice === null) return; // annule
+  const mode = choice.trim() === '2' ? 'vertical' : 'horizontal';
 
   const grid = document.getElementById('grid');
   const originalHTML = grid.innerHTML;
@@ -746,27 +805,11 @@ function printDuplex() {
   let duplexHTML = '';
   for (let p = 0; p < etiquettes.length; p += PER_PAGE) {
     const group = etiquettes.slice(p, p + PER_PAGE);
-    const cards = group.map((e, i) => {
-      const idx = p + i;
-      return `
-        <div class="etiquette-wrapper">
-          <div class="etiquette">
-            <div class="brand-tag">
-              <img class="logo-cocodeck" src="logo.png" alt="CocoDeck">
-            </div>
-            <div class="etiq-top">
-              <div class="plat-name">${esc(e.name)}</div>
-              <div class="plat-desc">${esc(e.desc || '')}</div>
-            </div>
-            <div class="etiq-separator"></div>
-            <div class="etiq-bottom">
-              <div class="prix">${esc(e.prix || '')}</div>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
-    duplexHTML += `<div class="duplex-page recto">${cards}</div>`;
-    duplexHTML += `<div class="duplex-page verso">${cards}</div>`;
+    const rectoCards = group.map(buildEtiquetteCard).join('');
+    const versoOrder = reorderForVerso(group, mode);
+    const versoCards = versoOrder.map(e => e ? buildEtiquetteCard(e) : '<div class="etiquette-wrapper"></div>').join('');
+    duplexHTML += `<div class="duplex-page recto">${rectoCards}</div>`;
+    duplexHTML += `<div class="duplex-page verso">${versoCards}</div>`;
   }
 
   grid.innerHTML = duplexHTML;
@@ -780,11 +823,12 @@ function printDuplex() {
     };
     window.addEventListener('afterprint', restore);
 
+    const modeLabel = mode === 'horizontal' ? 'grand cote' : 'petit cote';
     const confirmed = confirm(
-      'IMPRESSION RECTO-VERSO\n\n' +
+      'IMPRESSION RECTO-VERSO (mode : ' + modeLabel + ')\n\n' +
       'Dans la boite d\'impression, verifie :\n' +
       '1. Recto-verso active\n' +
-      '2. "Retourner sur le grand cote" (defaut)\n' +
+      '2. "Retourner sur le ' + modeLabel + '"\n' +
       '3. Papier epais 200g+ recommande\n\n' +
       'Continuer ?'
     );
