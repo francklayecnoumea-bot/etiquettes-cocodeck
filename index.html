@@ -154,11 +154,10 @@
   .etiquette:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
 
   .brand-tag {
-    padding: 10px 8px 8px; background: transparent;
+    background: #788060; padding: 18px 12px; text-align: center;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    border-bottom: 1px solid #c78570; min-height: 70px;
+    min-height: 70px;
   }
-  .brand-tag .logo-cocodeck { height: 56px; width: auto; display: block; }
 
   .etiq-top {
     flex: 1; display: flex; flex-direction: column; align-items: center;
@@ -172,9 +171,9 @@
     font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 400;
     color: #8a7a6a; margin-top: 6px; line-height: 1.3;
   }
-  .etiq-separator { width: 20px; height: 2px; background: #c78570; margin: 0 auto; }
-  .etiq-bottom { background: #788060; padding: 12px; text-align: center; }
-  .prix { font-family: 'Inter', sans-serif; font-size: 30px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+  .etiq-separator { display: none; }
+  .etiq-bottom { display: none; }
+  .prix { font-family: 'Inter', sans-serif; font-size: 32px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
 
   /* ===== RESPONSIVE MOBILE ===== */
   @media (max-width: 720px) {
@@ -731,15 +730,11 @@ function render() {
       <button class="delete-btn no-print" onclick="removeEtiquette(${typeof e.id === 'number' ? e.id : `'${e.id}'`})" title="Supprimer">&#10005;</button>
       <div class="etiquette">
         <div class="brand-tag">
-          <img class="logo-cocodeck" src="logo.png" alt="CocoDeck">
+          <div class="prix editable" contenteditable="true" data-idx="${i}" data-field="prix" onblur="onEditField(this)" ${!e.prix ? 'data-placeholder="Prix"' : ''}>${esc(e.prix || '')}</div>
         </div>
         <div class="etiq-top">
           <div class="plat-name editable" contenteditable="true" data-idx="${i}" data-field="name" onblur="onEditField(this)">${esc(e.name)}</div>
           <div class="plat-desc editable" contenteditable="true" data-idx="${i}" data-field="desc" onblur="onEditField(this)" ${!e.desc ? 'data-placeholder="Description..."' : ''}>${esc(e.desc || '')}</div>
-        </div>
-        <div class="etiq-separator"></div>
-        <div class="etiq-bottom">
-          <div class="prix editable" contenteditable="true" data-idx="${i}" data-field="prix" onblur="onEditField(this)" ${!e.prix ? 'data-placeholder="Prix"' : ''}>${esc(e.prix || '')}</div>
         </div>
       </div>
     </div>
@@ -766,15 +761,11 @@ function buildEtiquetteCard(e) {
     <div class="etiquette-wrapper">
       <div class="etiquette">
         <div class="brand-tag">
-          <img class="logo-cocodeck" src="logo.png" alt="CocoDeck">
+          <div class="prix">${esc(e.prix || '')}</div>
         </div>
         <div class="etiq-top">
           <div class="plat-name">${esc(e.name)}</div>
           <div class="plat-desc">${esc(e.desc || '')}</div>
-        </div>
-        <div class="etiq-separator"></div>
-        <div class="etiq-bottom">
-          <div class="prix">${esc(e.prix || '')}</div>
         </div>
       </div>
     </div>`;
