@@ -516,6 +516,7 @@ function filterCatalog() {
     const matchSearch = !search || item.name.toLowerCase().includes(search) || (item.desc || '').toLowerCase().includes(search);
     return matchCat && matchSearch;
   });
+  items.sort((a, b) => a.name.localeCompare(b.name, 'fr'));
   renderCatalogItems(items);
 }
 
