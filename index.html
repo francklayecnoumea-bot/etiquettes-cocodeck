@@ -138,6 +138,21 @@
   .editable[data-placeholder]:empty::before { content: attr(data-placeholder); color: rgba(122,106,90,0.4); font-style: italic; }
   .prix-unit { font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 3px; }
 
+  .qty-controls {
+    display: flex; align-items: center; gap: 4px; justify-content: center;
+    margin-top: 6px;
+  }
+  .qty-controls button {
+    width: 24px; height: 24px; border-radius: 50%; border: 1px solid #e0d5c2;
+    background: #fff; color: #2a2a2a; font-size: 14px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; font-family: 'Inter', sans-serif; padding: 0;
+  }
+  .qty-controls button:hover { background: #788060; color: #fff; border-color: #788060; }
+  .qty-controls .qty-val {
+    min-width: 28px; text-align: center; font-size: 14px; font-weight: 700; color: #2a2a2a;
+  }
+
   .empty-state { grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: #bbb; }
   .empty-state .icon { font-size: 36px; margin-bottom: 8px; opacity: 0.5; }
   .empty-state p { font-size: 13px; max-width: 300px; margin: 0 auto; line-height: 1.6; }
@@ -361,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </button>
     </div>
     <button class="btn btn-outline btn-small" onclick="clearAll()">Effacer</button>
-    <button class="btn btn-primary" onclick="switchTab('etiquettes'); setTimeout(()=>window.print(), 300)">Imprimer</button>
+    <button class="btn btn-primary" onclick="printSimple()">Imprimer</button>
     <button class="btn btn-add" onclick="printDuplex()" title="Imprime la meme etiquette au recto et au verso">Imprimer R/V</button>
   </div>
 </header>
@@ -557,7 +572,7 @@ function toggleCatalogItem(idx) {
     etiquettes.splice(existing, 1);
   } else {
     const item = CATALOGUE[idx];
-    etiquettes.push({ name: item.name, desc: item.desc || '', prix: item.prix || '', unit: item.unit, id: Date.now() + Math.random(), catalogIdx: idx });
+    etiquettes.push({ name: item.name, desc: item.desc || '', prix: item.prix || '', unit: item.unit, id: Date.now() + Math.random(), catalogIdx: idx, qty: 1 });
   }
   save(); render(); filterCatalog(); updateBadge();
 }
@@ -568,7 +583,7 @@ function addManual() {
   const prix = document.getElementById('platPrix').value.trim();
   const unit = document.getElementById('platUnit').value;
   if (!name || !prix) { document.getElementById('platName').focus(); return; }
-  etiquettes.push({ name, desc, prix, unit, id: Date.now(), catalogIdx: -1 });
+  etiquettes.push({ name, desc, prix, unit, id: Date.now(), catalogIdx: -1, qty: 1 });
   save(); render(); updateBadge();
   document.getElementById('platName').value = '';
   document.getElementById('platDesc').value = '';
@@ -583,6 +598,14 @@ document.addEventListener('keydown', e => {
 });
 
 function removeEtiquette(id) { etiquettes = etiquettes.filter(e => e.id !== id); save(); render(); filterCatalog(); updateBadge(); }
+
+function changeQty(idx, delta) {
+  if (idx < 0 || idx >= etiquettes.length) return;
+  const newQty = (etiquettes[idx].qty || 1) + delta;
+  if (newQty < 1) { removeEtiquette(etiquettes[idx].id); return; }
+  etiquettes[idx].qty = newQty;
+  save(); render(); updateBadge();
+}
 
 function onEditField(el) {
   const idx = parseInt(el.dataset.idx);
@@ -602,13 +625,16 @@ function clearAll() {
 function save() { localStorage.setItem('etiq-cocodeck-v1', JSON.stringify(etiquettes)); }
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
+function getTotalQty() { return etiquettes.reduce((sum, e) => sum + (e.qty || 1), 0); }
+
 function updateBadge() {
   const badge = document.getElementById('etiqBadge');
   const summary = document.getElementById('selectSummary');
   const count = document.getElementById('selectedCount');
+  const total = getTotalQty();
   if (etiquettes.length > 0) {
-    badge.style.display = 'inline'; badge.textContent = etiquettes.length;
-    summary.style.display = 'flex'; count.textContent = etiquettes.length;
+    badge.style.display = 'inline'; badge.textContent = total;
+    summary.style.display = 'flex'; count.textContent = total;
   } else {
     badge.style.display = 'none'; summary.style.display = 'none';
   }
@@ -616,7 +642,8 @@ function updateBadge() {
 
 function render() {
   const grid = document.getElementById('grid');
-  document.getElementById('counter').textContent = etiquettes.length + ' \u00e9tiquette' + (etiquettes.length !== 1 ? 's' : '');
+  const total = getTotalQty();
+  document.getElementById('counter').textContent = total + ' \u00e9tiquette' + (total !== 1 ? 's' : '');
 
   if (!etiquettes.length) {
     grid.innerHTML = '<div class="empty-state"><div class="icon">&#9997;</div><p>S\u00e9lectionnez des produits dans le catalogue ou ajoutez-en manuellement</p></div>';
@@ -634,6 +661,11 @@ function render() {
         <div class="etiq-middle">
           <div class="prix editable" contenteditable="true" data-idx="${i}" data-field="prix" onblur="onEditField(this)" ${!e.prix ? 'data-placeholder="Prix"' : ''}>${esc(e.prix || '')}</div>
         </div>
+      </div>
+      <div class="qty-controls no-print">
+        <button onclick="changeQty(${i}, -1)">−</button>
+        <span class="qty-val">${e.qty || 1}</span>
+        <button onclick="changeQty(${i}, +1)">+</button>
       </div>
     </div>
   `).join('');
@@ -696,6 +728,28 @@ function reorderForVerso(group) {
   ];
 }
 
+function printSimple() {
+  if (!etiquettes.length) { alert('Aucune etiquette a imprimer'); return; }
+  switchTab('etiquettes');
+  const grid = document.getElementById('grid');
+  const originalHTML = grid.innerHTML;
+  const expanded = expandEtiquettes();
+  grid.innerHTML = expanded.map(e => buildEtiquetteCard(e)).join('');
+  setTimeout(() => {
+    const restore = () => { grid.innerHTML = originalHTML; window.removeEventListener('afterprint', restore); };
+    window.addEventListener('afterprint', restore);
+    window.print();
+  }, 200);
+}
+
+function expandEtiquettes() {
+  const expanded = [];
+  for (const e of etiquettes) {
+    for (let q = 0; q < (e.qty || 1); q++) expanded.push(e);
+  }
+  return expanded;
+}
+
 function printDuplex() {
   if (!etiquettes.length) { alert('Aucune etiquette a imprimer'); return; }
   switchTab('etiquettes');
@@ -703,11 +757,11 @@ function printDuplex() {
   const grid = document.getElementById('grid');
   const originalHTML = grid.innerHTML;
 
-  // On construit les pages par paquets de 10 (5 colonnes x 2 rangees = A4 paysage)
+  const expanded = expandEtiquettes();
   const PER_PAGE = 10;
   let duplexHTML = '';
-  for (let p = 0; p < etiquettes.length; p += PER_PAGE) {
-    const group = etiquettes.slice(p, p + PER_PAGE);
+  for (let p = 0; p < expanded.length; p += PER_PAGE) {
+    const group = expanded.slice(p, p + PER_PAGE);
     const rectoCards = group.map(buildEtiquetteCard).join('');
     const versoOrder = reorderForVerso(group);
     const versoCards = versoOrder.map(e => e ? buildEtiquetteCard(e) : '<div class="etiquette-wrapper"></div>').join('');
